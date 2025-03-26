@@ -9,11 +9,14 @@ import Donate from './pages/Donate';
 import Request from './pages/Request';
 import JoinUs from './pages/JoinUs';
 import Login from './pages/Login';
+import VolunteerDashboard from './pages/VolunteerDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import { CssBaseline } from '@mui/material';
 
 function App() {
   return (
     <ThemeProvider>
+      <CssBaseline />
       <AuthProvider>
         <Router>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -51,6 +54,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <JoinUs />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/volunteer-dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <VolunteerDashboard />
                     </ProtectedRoute>
                   }
                 />

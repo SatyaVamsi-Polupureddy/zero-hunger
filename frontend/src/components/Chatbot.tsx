@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   Fade,
   Zoom,
+  Button,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -141,12 +142,17 @@ const Chatbot = () => {
             display: isOpen ? 'none' : 'flex',
             transform: 'scale(1)',
             transition: 'transform 0.3s ease-in-out',
+            zIndex: 1200,
+            width: isMobile ? 56 : 48,
+            height: isMobile ? 56 : 48,
+            backgroundColor: theme.palette.primary.main,
             '&:hover': {
               transform: 'scale(1.1)',
+              backgroundColor: theme.palette.primary.dark,
             },
           }}
         >
-          <ChatIcon />
+          <ChatIcon sx={{ fontSize: isMobile ? 32 : 24, color: 'white' }} />
         </Fab>
       </Zoom>
 
@@ -158,17 +164,20 @@ const Chatbot = () => {
             bottom: 0,
             right: isMobile ? 0 : 16,
             top: isMobile ? 0 : 'auto',
-            width: isMobile ? '100%' : 350,
-            height: isMobile ? '100%' : 500,
+            left: isMobile ? 0 : 'auto',
+            width: isMobile ? '100vw' : 350,
+            height: isMobile ? '100vh' : 500,
             display: 'flex',
             flexDirection: 'column',
-            zIndex: 1000,
+            zIndex: 1300,
             borderRadius: isMobile ? 0 : 2,
             transform: 'translateY(0)',
             transition: 'transform 0.3s ease-in-out',
             '&:hover': {
               transform: 'translateY(-4px)',
             },
+            margin: 0,
+            padding: 0,
           }}
         >
           {/* Chat Header */}
@@ -182,20 +191,23 @@ const Chatbot = () => {
               justifyContent: 'space-between',
               borderTopLeftRadius: isMobile ? 0 : 8,
               borderTopRightRadius: isMobile ? 0 : 8,
+              position: 'relative',
             }}
           >
             <Typography variant="h6">Zero Hunger Assistant</Typography>
             <IconButton
-              size="small"
+              size="large"
               onClick={() => setIsOpen(false)}
               sx={{ 
                 color: 'white',
                 '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 },
+                width: isMobile ? 48 : 40,
+                height: isMobile ? 48 : 40,
               }}
             >
-              <CloseIcon />
+              <CloseIcon sx={{ fontSize: isMobile ? 32 : 24 }} />
             </IconButton>
           </Box>
 

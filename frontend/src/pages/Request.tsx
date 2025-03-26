@@ -427,8 +427,9 @@ const Request: React.FC = () => {
                       sx={{
                         p: 2,
                         display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
                         gap: 2,
-                        alignItems: 'flex-start',
+                        alignItems: { xs: 'center', sm: 'flex-start' },
                         '&:hover': {
                           bgcolor: 'action.hover',
                         },
@@ -440,14 +441,15 @@ const Request: React.FC = () => {
                           src={donation.imageUrl}
                           alt={donation.itemName}
                           sx={{
-                            width: 100,
-                            height: 100,
+                            width: { xs: '100%', sm: 100 },
+                            height: { xs: 200, sm: 100 },
                             objectFit: 'cover',
                             borderRadius: 1,
+                            mb: { xs: 2, sm: 0 },
                           }}
                         />
                       )}
-                      <Box sx={{ flex: 1 }}>
+                      <Box sx={{ flex: 1, width: '100%', textAlign: { xs: 'center', sm: 'left' } }}>
                         <Typography variant="h6" gutterBottom>
                           {donation.itemName}
                         </Typography>
@@ -466,6 +468,10 @@ const Request: React.FC = () => {
                         color="primary"
                         onClick={() => handleRequest(donation)}
                         disabled={loading}
+                        sx={{ 
+                          mt: { xs: 2, sm: 0 },
+                          width: { xs: '100%', sm: 'auto' }
+                        }}
                       >
                         Request
                       </Button>

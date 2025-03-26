@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -36,6 +37,16 @@ interface JoinUsForm {
   volunteerType: string;
   organization: string;
   description: string;
+  experience: string;
+  availability: string;
+  storehouseType: string;
+  storehouseLocation: string;
+  storageCapacity: string;
+  vehicleType: string;
+  licenseNumber: string;
+  ngoName: string;
+  ngoLocation: string;
+  ngoType: string;
 }
 
 const JoinUs = () => {
@@ -52,7 +63,18 @@ const JoinUs = () => {
     volunteerType: '',
     organization: '',
     description: '',
+    experience: '',
+    availability: '',
+    storehouseType: '',
+    storehouseLocation: '',
+    storageCapacity: '',
+    vehicleType: '',
+    licenseNumber: '',
+    ngoName: '',
+    ngoLocation: '',
+    ngoType: '',
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
@@ -63,36 +85,43 @@ const JoinUs = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
+
     setLoading(true);
-    setError(null);
-    setSuccess(false);
-
     try {
-      if (!user) {
-        throw new Error('You must be logged in to join');
-      }
-
-      const submissionData = {
-        ...formData,
+      const volunteerData = {
         userId: user.uid,
-        createdAt: serverTimestamp(),
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        role: formData.role,
         status: 'pending',
+        experience: formData.experience,
+        availability: formData.availability,
+        ...(formData.role === 'storehouse' && {
+          storehouseType: formData.storehouseType,
+          storehouseLocation: formData.storehouseLocation,
+          storageCapacity: formData.storageCapacity,
+        }),
+        ...(formData.role === 'delivery' && {
+          vehicleType: formData.vehicleType,
+          licenseNumber: formData.licenseNumber,
+        }),
+        ...(formData.role === 'ngo' && {
+          ngoName: formData.ngoName,
+          ngoLocation: formData.ngoLocation,
+          ngoType: formData.ngoType,
+        }),
       };
 
-      await addDoc(collection(db, 'volunteers'), submissionData);
+      await addDoc(collection(db, 'volunteers'), volunteerData);
       setSuccess(true);
-      setFormData({
-        ...formData,
-        phone: '',
-        address: '',
-        role: '',
-        volunteerType: '',
-        organization: '',
-        description: '',
-      });
-    } catch (error: any) {
-      console.error('Error submitting application:', error);
-      setError(error.message || 'Failed to submit application. Please try again.');
+      setTimeout(() => {
+        navigate('/volunteer-dashboard');
+      }, 2000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError('Failed to submit form. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -120,7 +149,7 @@ const JoinUs = () => {
                     name="role"
                     onChange={handleInputChange}
                   >
-                    <MenuItem value="volunteer">Volunteer</MenuItem>
+                    <MenuItem value="volunteer">Store House</MenuItem>
                     <MenuItem value="delivery-agent">Delivery Agent</MenuItem>
                     <MenuItem value="ngo">NGO / Organization</MenuItem>
                   </Select>

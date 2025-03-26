@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   AppBar, 
   Toolbar, 
@@ -20,11 +20,14 @@ import {
   Fade,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme as useCustomTheme } from '../contexts/ThemeContext';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -64,6 +67,27 @@ const Navbar = () => {
     { text: 'Join Us', path: '/join-us' },
   ];
 
+  const [isVolunteer, setIsVolunteer] = useState(false);
+
+  useEffect(() => {
+    const checkVolunteerStatus = async () => {
+      if (!user) return;
+      
+      try {
+        const q = query(
+          collection(db, 'volunteers'),
+          where('userId', '==', user.uid)
+        );
+        const querySnapshot = await getDocs(q);
+        setIsVolunteer(!querySnapshot.empty);
+      } catch (error) {
+        console.error('Error checking volunteer status:', error);
+      }
+    };
+
+    checkVolunteerStatus();
+  }, [user]);
+
   if (!user || location.pathname === '/login') {
     return null;
   }
@@ -95,6 +119,30 @@ const Navbar = () => {
           />
         </ListItem>
       ))}
+      {isVolunteer && (
+        <ListItem 
+          button 
+          onClick={() => {
+            navigate('/volunteer-dashboard');
+            setMobileOpen(false);
+          }}
+          sx={{
+            '&:hover': {
+              backgroundColor: theme.palette.mode === 'dark' 
+                ? 'rgba(255, 255, 255, 0.08)' 
+                : 'rgba(0, 0, 0, 0.04)',
+            },
+          }}
+        >
+          <ListItemText 
+            primary="Volunteer Dashboard"
+            primaryTypographyProps={{
+              color: location.pathname === '/volunteer-dashboard' ? 'primary' : 'textPrimary',
+              fontWeight: location.pathname === '/volunteer-dashboard' ? 600 : 400,
+            }}
+          />
+        </ListItem>
+      )}
     </List>
   );
 
@@ -179,6 +227,41 @@ const Navbar = () => {
               </Button>
             );
           })}
+          {isVolunteer && (
+            <Button
+              color="inherit"
+              onClick={() => navigate('/volunteer-dashboard')}
+              sx={{
+                mx: 1,
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: '50%',
+                  width: location.pathname === '/volunteer-dashboard' ? '100%' : '0%',
+                  height: '2px',
+                  backgroundColor: theme.palette.primary.main,
+                  transition: 'all 0.3s ease',
+                  transform: 'translateX(-50%)',
+                },
+                '&:hover::after': {
+                  width: location.pathname === '/volunteer-dashboard' ? '100%' : '100%',
+                },
+                color: location.pathname === '/volunteer-dashboard' ? 'primary' : 'textPrimary',
+                fontWeight: location.pathname === '/volunteer-dashboard' ? 600 : 400,
+                '&:hover': {
+                  backgroundColor: location.pathname === '/volunteer-dashboard'
+                    ? 'transparent'
+                    : theme.palette.mode === 'dark'
+                      ? 'rgba(255, 255, 255, 0.08)'
+                      : 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              Volunteer Dashboard
+            </Button>
+          )}
         </Box>
 
         <Tooltip title="Toggle theme" TransitionComponent={Fade}>
@@ -294,6 +377,27 @@ const Navbar = () => {
           },
         }}
       >
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'flex-end',
+          p: 2,
+          borderBottom: `1px solid ${theme.palette.divider}`
+        }}>
+          <IconButton
+            onClick={handleDrawerToggle}
+            sx={{ 
+              color: theme.palette.text.primary,
+              '&:hover': {
+                backgroundColor: theme.palette.mode === 'dark' 
+                  ? 'rgba(255, 255, 255, 0.08)' 
+                  : 'rgba(0, 0, 0, 0.04)',
+              },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
         {drawer}
       </Drawer>
     </AppBar>
