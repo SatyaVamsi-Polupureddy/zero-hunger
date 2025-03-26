@@ -121,7 +121,7 @@ const JoinUs = () => {
       }, 2000);
     } catch (error) {
       console.error('Error submitting form:', error);
-      setError('Failed to submit form. Please try again.');
+      setError('Failed to submit form. Please try again..');
     } finally {
       setLoading(false);
     }
