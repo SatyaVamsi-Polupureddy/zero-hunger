@@ -14,6 +14,7 @@ const Footer = () => {
             : theme.palette.grey[800],
       }}
     >
+      {/* foot */}
       <Container maxWidth="sm">
         <Typography variant="body2" color="text.secondary" align="center">
           {'By team '}

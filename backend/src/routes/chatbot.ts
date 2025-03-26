@@ -138,6 +138,7 @@ Assistant:`;
       });
       throw new Error(errorData.error?.message || 'Failed to get response from AI');
     }
+       {/* foot */}
 
     const data = await response.json() as GeminiResponse;
     console.log('Received response from Gemini API:', data);

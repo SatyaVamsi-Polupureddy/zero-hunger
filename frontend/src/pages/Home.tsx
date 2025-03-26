@@ -1,3 +1,5 @@
+// Hi
+
 /**
  * Home.tsx
  * Main landing page component displaying statistics and featured donations

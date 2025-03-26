@@ -16,6 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     if (!expiresAt) return true;
     return new Date().getTime() > parseInt(expiresAt);
   };
+     {/* foot */}
 
   if (loading) {
     return (
@@ -29,6 +30,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       </Box>
     );
   }
+     {/* foot */}
 
   // If no user or token is expired, redirect to login
   if (!user || isTokenExpired()) {

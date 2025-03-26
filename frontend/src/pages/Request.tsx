@@ -277,7 +277,7 @@ const Request: React.FC = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-
+   {/* foot */}
                   {formData.itemName === 'Other' && (
                     <Grid item xs={12}>
                       <TextField

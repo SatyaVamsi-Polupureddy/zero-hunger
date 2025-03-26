@@ -30,7 +30,7 @@ interface Message {
   sender: 'user' | 'bot';
   timestamp: Date;
 }
-
+   {/* foot */}
 interface ImportMetaEnv {
   readonly VITE_GEMINI_API_KEY: string;
   readonly VITE_API_URL: string;

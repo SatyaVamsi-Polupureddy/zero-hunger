@@ -126,7 +126,7 @@ const JoinUs = () => {
       setLoading(false);
     }
   };
-
+   {/* foot */}
   return (
     <Container maxWidth="md">
       <Box sx={{ py: 4 }}>

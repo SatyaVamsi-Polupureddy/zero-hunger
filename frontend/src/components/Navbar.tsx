@@ -110,6 +110,7 @@ const Navbar = () => {
             },
           }}
         >
+             {/* foot */}
           <ListItemText 
             primary={item.text}
             primaryTypographyProps={{
